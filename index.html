@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ethereal Folk Artist | Official Site</title>
+    
+    <!-- Google Fonts: Cormorant Garamond for ethereal display header & Inter for body -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+    
+    <!-- FontAwesome for music & social icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0d0814;
+            color: #f3effa;
+            overflow-x: hidden;
+        }
+
+        .font-serif-display {
+            font-family: 'Cormorant Garamond', Georgia, serif;
+        }
+
+        /* Ethereal background with misty ocean/forest overlay and amethyst tint */
+        .bg-misty-amethyst {
+            background: 
+                radial-gradient(circle at 50% 30%, rgba(147, 112, 219, 0.25), transparent 70%),
+                radial-gradient(circle at 80% 80%, rgba(75, 0, 130, 0.3), transparent 60%),
+                linear-gradient(to bottom, rgba(13, 8, 20, 0.55), rgba(13, 8, 20, 0.85)),
+                url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat fixed;
+        }
+
+        /* Soft glassmorphism container */
+        .amethyst-glass {
+            background: rgba(30, 20, 45, 0.35);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(216, 180, 254, 0.15);
+            box-shadow: 0 8px 32px 0 rgba(10, 4, 22, 0.37);
+        }
+
+        /* Subtle glowing interactive elements */
+        .glow-hover:hover {
+            box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
+            border-color: rgba(216, 180, 254, 0.4);
+            transform: translateY(-2px);
+        }
+
+        /* Smooth transitions */
+        .smooth-transition {
+            transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        /* Floating background mist animation */
+        @keyframes mistFloat {
+            0% { transform: translateY(0) scale(1); opacity: 0.2; }
+            50% { transform: translateY(-15px) scale(1.05); opacity: 0.35; }
+            100% { transform: translateY(0) scale(1); opacity: 0.2; }
+        }
+
+        .floating-mist {
+            animation: mistFloat 12s infinite ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-misty-amethyst min-h-screen flex flex-col justify-between items-center px-4 py-8 md:py-12 relative selection:bg-purple-900 selection:text-purple-100">
+
+    <!-- Ambient background mist light -->
+    <div class="fixed inset-0 pointer-events-none floating-mist bg-gradient-to-t from-purple-900/10 via-transparent to-purple-950/20"></div>
+
+    <!-- Header / Branding -->
+    <header class="w-full max-w-xl text-center z-10 pt-4 md:pt-8 mb-6">
+        <p class="uppercase tracking-[0.3em] text-xs md:text-sm text-purple-300/70 font-light mb-2">Folk & Acoustic</p>
+        <h1 class="font-serif-display text-4xl sm:text-5xl md:text-6xl font-light tracking-wide text-purple-100 drop-shadow-md">
+            Mireille Vane
+        </h1>
+    </header>
+
+    <!-- Main Content Glass Container -->
+    <main class="w-full max-w-md md:max-w-lg z-10 my-auto">
+        <div class="amethyst-glass rounded-3xl p-6 sm:p-10 text-center relative overflow-hidden">
+            
+            <!-- Soft amethyst highlight blob -->
+            <div class="absolute -top-12 -left-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
+            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+
+            <!-- Subheading / Atmosphere Description -->
+            <p class="font-serif-display italic text-xl sm:text-2xl text-purple-200/90 font-light mb-6">
+                "Songs gathered from ocean fog and cedar woods."
+            </p>
+
+            <!-- Newsletter Signup Form (Front & Center) -->
+            <div class="mb-10">
+                <p class="text-xs tracking-widest text-purple-300/80 uppercase mb-3 font-normal">
+                    Join the Inner Circle
+                </p>
+                <p class="text-xs sm:text-sm text-purple-200/70 mb-4 font-light">
+                    Receive intimate acoustic demos, poetry, and early tour announcements.
+                </p>
+
+                <form id="newsletter-form" onsubmit="handleSubscribe(event)" class="space-y-3">
+                    <div class="relative">
+                        <input 
+                            type="email" 
+                            id="email-input"
+                            required 
+                            placeholder="Enter your email address..." 
+                            class="w-full px-4 py-3.5 rounded-full bg-purple-950/40 border border-purple-300/20 text-purple-100 placeholder-purple-300/40 text-sm focus:outline-none focus:border-purple-300/60 focus:ring-1 focus:ring-purple-300/50 smooth-transition"
+                        >
+                    </div>
+                    <button 
+                        type="submit" 
+                        class="w-full py-3.5 px-6 rounded-full bg-purple-300/15 hover:bg-purple-300/25 border border-purple-200/30 text-purple-100 text-xs sm:text-sm tracking-widest uppercase font-medium glow-hover smooth-transition cursor-pointer"
+                    >
+                        Subscribe
+                    </button>
+                </form>
+
+                <!-- Status message box -->
+                <div id="status-message" class="hidden mt-3 text-xs text-purple-200/90 bg-purple-900/40 border border-purple-400/20 rounded-xl p-2.5"></div>
+            </div>
+
+            <div class="w-16 h-[1px] bg-purple-300/20 mx-auto mb-8"></div>
+
+            <!-- Streaming Platforms Section -->
+            <div>
+                <p class="text-xs tracking-widest text-purple-300/80 uppercase mb-4 font-normal">
+                    Listen Everywhere
+                </p>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                    
+                    <!-- Spotify -->
+                    <a href="https://spotify.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-brands fa-spotify text-emerald-400 text-lg group-hover:scale-110 smooth-transition"></i>
+                            <span class="text-xs sm:text-sm font-light text-purple-100">Spotify</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
+                    </a>
+
+                    <!-- Apple Music -->
+                    <a href="https://music.apple.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-brands fa-apple text-pink-300 text-lg group-hover:scale-110 smooth-transition"></i>
+                            <span class="text-xs sm:text-sm font-light text-purple-100">Apple Music</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
+                    </a>
+
+                    <!-- Bandcamp -->
+                    <a href="https://bandcamp.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-brands fa-bandcamp text-sky-300 text-lg group-hover:scale-110 smooth-transition"></i>
+                            <span class="text-xs sm:text-sm font-light text-purple-100">Bandcamp</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
+                    </a>
+
+                    <!-- YouTube Music -->
+                    <a href="https://youtube.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-brands fa-youtube text-red-400 text-lg group-hover:scale-110 smooth-transition"></i>
+                            <span class="text-xs sm:text-sm font-light text-purple-100">YouTube</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
+                    </a>
+
+                    <!-- Soundcloud -->
+                    <a href="https://soundcloud.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group sm:col-span-2">
+                        <div class="flex items-center space-x-3">
+                            <i class="fa-brands fa-soundcloud text-orange-400 text-lg group-hover:scale-110 smooth-transition"></i>
+                            <span class="text-xs sm:text-sm font-light text-purple-100">SoundCloud</span>
+                        </div>
+                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
+                    </a>
+
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-xl text-center z-10 mt-6 pt-4 text-purple-300/50 text-xs font-light">
+        <div class="flex justify-center space-x-6 mb-3">
+            <a href="https://instagram.com" aria-label="Instagram" class="hover:text-purple-200 smooth-transition"><i class="fa-brands fa-instagram text-base"></i></a>
+            <a href="https://tiktok.com" aria-label="TikTok" class="hover:text-purple-200 smooth-transition"><i class="fa-brands fa-tiktok text-base"></i></a>
+            <a href="mailto:booking@artist.com" aria-label="Email" class="hover:text-purple-200 smooth-transition"><i class="fa-regular fa-envelope text-base"></i></a>
+        </div>
+        <p>&copy; 2026 Mireille Vane. All rights reserved.</p>
+    </footer>
+
+    <!-- JavaScript Logic -->
+    <script>
+        function handleSubscribe(event) {
+            event.preventDefault();
+            const emailInput = document.getElementById('email-input');
+            const statusMessage = document.getElementById('status-message');
+            
+            if (emailInput.value) {
+                // Display success message
+                statusMessage.textContent = 'Welcome to the circle. Check your inbox soon for misty melodies.';
+                statusMessage.classList.remove('hidden');
+                
+                // Reset input
+                emailInput.value = '';
+                
+                // Hide message after 5 seconds
+                setTimeout(() => {
+                    statusMessage.classList.add('hidden');
+                }, 5000);
+            }
+        }
+    </script>
+</body>
+</html>
