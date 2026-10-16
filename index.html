@@ -366,7 +366,7 @@
 
             <!-- Tracks Grid -->
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Frozen Track Card with precise SoundCloud Demo link -->
+                <!-- Frozen Track Card -->
                 <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" 
                      data-title="Frozen" 
                      data-subtitle="New Single" 
@@ -445,15 +445,12 @@
         <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
             <div class="glass-panel rounded-3xl p-8 sm:p-14">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
-                    <div class="md:col-span-5 space-y-4 text-center md:text-left">
-                        <div class="inline-block p-4 border border-amethyst-400/30 rounded-2xl bg-amethyst-900/40">
-                            <svg class="w-28 h-28 mx-auto text-amethyst-300" viewBox="0 0 100 100" fill="none">
-                                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
-                                <path d="M50 15 C 30 40, 30 60, 50 85 C 70 60, 70 40, 50 15 Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
-                                <circle cx="50" cy="50" r="5" fill="currentColor"/>
-                            </svg>
+                    <div class="md:col-span-5 space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
+                        <!-- Miriam's Photo inserted here replacing vector logo placeholder -->
+                        <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-2xl overflow-hidden border border-amethyst-400/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
+                            <img src="miriam.jpg" alt="Miriam O'Shea" class="w-full h-full object-cover object-top">
                         </div>
-                        <h4 class="font-cinzel text-xl text-amethyst-200 tracking-widest uppercase">Traditional Roots</h4>
+                        <h4 class="font-cinzel text-xl text-amethyst-200 tracking-widest uppercase pt-2">Traditional Roots</h4>
                         <p class="font-cormorant italic text-amethyst-300 text-lg">"Music woven from mist, ocean tides, and timeless memory."</p>
                     </div>
 
@@ -556,7 +553,6 @@
 
         <!-- FOOTER -->
         <footer class="mt-auto py-10 border-t border-amethyst-800/30 text-center text-xs text-amethyst-400 space-y-4">
-            <!-- Social Links Added to Bottom Banner -->
             <div class="flex items-center justify-center space-x-4 text-amethyst-300">
                 <a href="https://open.spotify.com/artist/0DY866dyn6XxODAyZ9X3V0" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-emerald-500/20 hover:border-emerald-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 shadow-md" aria-label="Spotify">
                     <i class="fa-brands fa-spotify text-base"></i>
