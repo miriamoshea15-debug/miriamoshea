@@ -143,6 +143,12 @@
 </head>
 <body class="font-sans antialiased selection:bg-amethyst-700 selection:text-white">
 
+    <!-- HIDDEN HTML5 AUDIO ELEMENT -->
+    <audio id="audio-source" preload="metadata">
+        <source src="frozen.mp3" type="audio/mpeg">
+        Your browser does not support the audio element.
+    </audio>
+
     <div class="bg-wrapper">
         <canvas id="water-canvas"></canvas>
         <video id="hero-video" autoplay loop muted playsinline preload="auto" poster="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80">
@@ -331,11 +337,11 @@
 
                         <div class="space-y-2">
                             <div class="flex items-center justify-between text-xs text-amethyst-400 font-mono">
-                                <span id="current-time">0:42</span>
+                                <span id="current-time">0:00</span>
                                 <span id="total-time">3:48</span>
                             </div>
                             <div id="progress-bar-bg" class="w-full h-2 bg-amethyst-950/80 rounded-full cursor-pointer relative overflow-hidden border border-amethyst-800/50">
-                                <div id="progress-bar" class="h-full bg-gradient-to-r from-amethyst-500 to-amethyst-300 w-1/4 rounded-full relative"></div>
+                                <div id="progress-bar" class="h-full bg-gradient-to-r from-amethyst-500 to-amethyst-300 w-0 rounded-full relative"></div>
                             </div>
                         </div>
 
@@ -446,7 +452,6 @@
             <div class="glass-panel rounded-3xl p-8 sm:p-14">
                 <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
                     <div class="md:col-span-5 space-y-4 text-center md:text-left flex flex-col items-center md:items-start">
-                        <!-- Miriam's Photo inserted here replacing vector logo placeholder -->
                         <div class="relative w-44 h-44 sm:w-52 sm:h-52 rounded-2xl overflow-hidden border border-amethyst-400/30 shadow-[0_10px_30px_rgba(0,0,0,0.5)]">
                             <img src="miriam.jpg" alt="Miriam O'Shea" class="w-full h-full object-cover object-top">
                         </div>
@@ -579,7 +584,7 @@
 
     </div>
 
-    <!-- SCRIPT LOGIC FOR TRACK SWITCHING & DYNAMIC LINKS -->
+    <!-- AUDIO PLAYER & WATER PHYSICS SCRIPT -->
     <script>
         const canvas = document.getElementById('water-canvas');
         const ctx = canvas.getContext('2d');
@@ -624,23 +629,71 @@
             video.play().catch(() => { video.style.opacity = '0'; });
         }
 
-        // Music Player Interactive Logic with Dynamic Link Updates
+        // ========================================================
+        // HTML5 AUDIO PLAYER HOOKS & TIMELINE LOGIC
+        // ========================================================
+        const audioElement = document.getElementById('audio-source');
         let isPlaying = false;
         const playBtn = document.getElementById('play-btn');
         const playIcon = document.getElementById('play-icon');
-        
+        const progressBar = document.getElementById('progress-bar');
+        const progressBarBg = document.getElementById('progress-bar-bg');
+        const currentTimeEl = document.getElementById('current-time');
+        const totalTimeEl = document.getElementById('total-time');
+
+        // Format seconds to mm:ss
+        function formatTime(seconds) {
+            const mins = Math.floor(seconds / 60);
+            const secs = Math.floor(seconds % 60);
+            return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+        }
+
+        audioElement.addEventListener('loadedmetadata', () => {
+            totalTimeEl.textContent = formatTime(audioElement.duration);
+        });
+
+        audioElement.addEventListener('timeupdate', () => {
+            if (audioElement.duration) {
+                const progressPercent = (audioElement.currentTime / audioElement.duration) * 100;
+                progressBar.style.width = `${progressPercent}%`;
+                currentTimeEl.textContent = formatTime(audioElement.currentTime);
+            }
+        });
+
+        // Clickable progress bar to skip through track
+        progressBarBg.addEventListener('click', (e) => {
+            const rect = progressBarBg.getBoundingClientRect();
+            const clickPosition = (e.clientX - rect.left) / rect.width;
+            if (audioElement.duration) {
+                audioElement.currentTime = clickPosition * audioElement.duration;
+            }
+        });
+
         playBtn.addEventListener('click', () => {
             isPlaying = !isPlaying;
             if (isPlaying) {
+                audioElement.play().catch(err => {
+                    console.log("Playback blocked or failed:", err);
+                });
                 playIcon.classList.remove('fa-play', 'translate-x-0.5');
                 playIcon.classList.add('fa-pause');
             } else {
+                audioElement.pause();
                 playIcon.classList.remove('fa-pause');
                 playIcon.classList.add('fa-play', 'translate-x-0.5');
             }
         });
 
-        // Clicking track cards updates the player title, subtitle, artist, and all platform buttons automatically
+        // When audio finishes playing naturally
+        audioElement.addEventListener('ended', () => {
+            isPlaying = false;
+            playIcon.classList.remove('fa-pause');
+            playIcon.classList.add('fa-play', 'translate-x-0.5');
+            progressBar.style.width = '0%';
+            audioElement.currentTime = 0;
+        });
+
+        // Clicking track cards updates player details and active streaming links
         document.querySelectorAll('.track-card').forEach(card => {
             card.addEventListener('click', () => {
                 const title = card.getAttribute('data-title');
@@ -652,22 +705,16 @@
                 const youtubeUrl = card.getAttribute('data-youtube');
                 const soundcloudUrl = card.getAttribute('data-soundcloud');
 
-                // Update text elements in player box
                 document.getElementById('player-track-name').textContent = title;
                 document.getElementById('current-track-title').textContent = title;
                 document.getElementById('current-track-subtitle').textContent = subtitle;
                 document.getElementById('player-track-artist').textContent = artist;
 
-                // Update link destinations for streaming buttons in player box
                 document.getElementById('player-spotify').href = spotifyUrl;
                 document.getElementById('player-apple').href = appleUrl;
                 document.getElementById('player-youtube').href = youtubeUrl;
                 document.getElementById('player-soundcloud').href = soundcloudUrl;
 
-                isPlaying = true;
-                playIcon.classList.remove('fa-play', 'translate-x-0.5');
-                playIcon.classList.add('fa-pause');
-                
                 document.getElementById('player').scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
         });
