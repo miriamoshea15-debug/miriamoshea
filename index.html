@@ -1,222 +1,700 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="scroll-smooth">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ethereal Folk Artist | Official Site</title>
-    
-    <!-- Google Fonts: Cormorant Garamond for ethereal display header & Inter for body -->
+    <title>Miriam O'Shea | Official Website</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
-    
-    <!-- FontAwesome for music & social icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        amethyst: {
+                            950: '#120d16',
+                            900: '#1c1522',
+                            800: '#281d32',
+                            700: '#423152',
+                            600: '#5a466d',
+                            500: '#756088',
+                            400: '#9580a8',
+                            300: '#b8a8c8',
+                            200: '#d9d0e2',
+                            100: '#f2eef6',
+                        }
+                    },
+                    fontFamily: {
+                        cinzel: ['Cinzel', 'serif'],
+                        cormorant: ['Cormorant Garamond', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+
     <style>
         body {
-            font-family: 'Inter', sans-serif;
-            background-color: #0d0814;
-            color: #f3effa;
+            background-color: #120d16;
+            color: #d9d0e2;
             overflow-x: hidden;
         }
 
-        .font-serif-display {
-            font-family: 'Cormorant Garamond', Georgia, serif;
+        /* Moving Background Stack */
+        .bg-wrapper {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 0;
+            overflow: hidden;
+            pointer-events: none;
         }
 
-        /* Ethereal background with misty ocean/forest overlay and amethyst tint */
-        .bg-misty-amethyst {
-            background: 
-                radial-gradient(circle at 50% 30%, rgba(147, 112, 219, 0.25), transparent 70%),
-                radial-gradient(circle at 80% 80%, rgba(75, 0, 130, 0.3), transparent 60%),
-                linear-gradient(to bottom, rgba(13, 8, 20, 0.55), rgba(13, 8, 20, 0.85)),
-                url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=2000&q=80') center/cover no-repeat fixed;
+        /* Canvas Water Simulation Layer */
+        #water-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
         }
 
-        /* Soft glassmorphism container */
-        .amethyst-glass {
-            background: rgba(30, 20, 45, 0.35);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(216, 180, 254, 0.15);
-            box-shadow: 0 8px 32px 0 rgba(10, 4, 22, 0.37);
+        /* HTML5 Video Layer */
+        .bg-wrapper video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: 2;
+            opacity: 0.85;
+            filter: brightness(0.6) contrast(1.15) saturate(0.25) hue-rotate(225deg);
+            transition: opacity 0.8s ease;
         }
 
-        /* Subtle glowing interactive elements */
-        .glow-hover:hover {
-            box-shadow: 0 0 20px rgba(192, 132, 252, 0.3);
-            border-color: rgba(216, 180, 254, 0.4);
-            transform: translateY(-2px);
+        /* Amethyst Tint & Vignette Overlays */
+        .amethyst-overlay {
+            position: absolute;
+            inset: 0;
+            z-index: 3;
+            background: linear-gradient(
+                135deg,
+                rgba(18, 13, 22, 0.82) 0%,
+                rgba(40, 29, 50, 0.65) 50%,
+                rgba(18, 13, 22, 0.88) 100%
+            );
+            mix-blend-mode: multiply;
         }
 
-        /* Smooth transitions */
-        .smooth-transition {
+        .video-vignette {
+            position: absolute;
+            inset: 0;
+            z-index: 4;
+            background: radial-gradient(circle at center, rgba(18, 13, 22, 0.15) 0%, rgba(18, 13, 22, 0.9) 100%);
+        }
+
+        .glass-panel {
+            background: rgba(28, 21, 34, 0.65);
+            backdrop-filter: blur(18px);
+            -webkit-backdrop-filter: blur(18px);
+            border: 1px solid rgba(184, 168, 200, 0.15);
+        }
+
+        .glass-card {
+            background: rgba(40, 29, 50, 0.45);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(184, 168, 200, 0.1);
             transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
         }
 
-        /* Floating background mist animation */
-        @keyframes mistFloat {
-            0% { transform: translateY(0) scale(1); opacity: 0.2; }
-            50% { transform: translateY(-15px) scale(1.05); opacity: 0.35; }
-            100% { transform: translateY(0) scale(1); opacity: 0.2; }
+        .glass-card:hover {
+            background: rgba(66, 49, 82, 0.45);
+            border-color: rgba(184, 168, 200, 0.35);
+            transform: translateY(-4px);
         }
 
-        .floating-mist {
-            animation: mistFloat 12s infinite ease-in-out;
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #120d16;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #423152;
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #756088;
+        }
+
+        .text-glow {
+            text-shadow: 0 0 20px rgba(184, 168, 200, 0.4);
         }
     </style>
 </head>
-<body class="bg-misty-amethyst min-h-screen flex flex-col justify-between items-center px-4 py-8 md:py-12 relative selection:bg-purple-900 selection:text-purple-100">
+<body class="font-sans antialiased selection:bg-amethyst-700 selection:text-white">
 
-    <!-- Ambient background mist light -->
-    <div class="fixed inset-0 pointer-events-none floating-mist bg-gradient-to-t from-purple-900/10 via-transparent to-purple-950/20"></div>
+    <!-- GUARANTEED MOVING WATER BACKGROUND SYSTEM -->
+    <div class="bg-wrapper">
+        <!-- Layer 1: Active Physics Ocean Canvas (Guaranteed Motion on All Devices) -->
+        <canvas id="water-canvas"></canvas>
 
-    <!-- Header / Branding -->
-    <header class="w-full max-w-xl text-center z-10 pt-4 md:pt-8 mb-6">
-        <p class="uppercase tracking-[0.3em] text-xs md:text-sm text-purple-300/70 font-light mb-2">Welcome to The World Of</p>
-        <h1 class="font-serif-display text-4xl sm:text-5xl md:text-6xl font-light tracking-wide text-purple-100 drop-shadow-md">
-            Miriam O'Shea
-        </h1>
-    </header>
+        <!-- Layer 2: High Quality Ocean Video -->
+        <video id="hero-video" autoplay loop muted playsinline preload="auto" poster="https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80">
+            <source src="https://assets.mixkit.co/videos/download/mixkit-slow-motion-waves-crashing-on-a-rocky-shore-41586-medium.mp4" type="video/mp4">
+            <source src="https://assets.mixkit.co/videos/download/mixkit-waves-in-the-water-1164-medium.mp4" type="video/mp4">
+        </video>
 
-    <!-- Main Content Glass Container -->
-    <main class="w-full max-w-md md:max-w-lg z-10 my-auto">
-        <div class="amethyst-glass rounded-3xl p-6 sm:p-10 text-center relative overflow-hidden">
-            
-            <!-- Soft amethyst highlight blob -->
-            <div class="absolute -top-12 -left-12 w-32 h-32 bg-purple-500/10 rounded-full blur-2xl pointer-events-none"></div>
-            <div class="absolute -bottom-12 -right-12 w-32 h-32 bg-indigo-500/10 rounded-full blur-2xl pointer-events-none"></div>
+        <!-- Layer 3: Natural Amethyst Color Grading Overlay -->
+        <div class="amethyst-overlay"></div>
+        <!-- Layer 4: Contrast Vignette -->
+        <div class="video-vignette"></div>
+    </div>
 
-            <!-- Subheading / Atmosphere Description -->
-            <p class="font-serif-display italic text-xl sm:text-2xl text-purple-200/90 font-light mb-6">
-                "Songs gathered from ocean fog and cedar woods."
-            </p>
+    <!-- MAIN APP CONTENT -->
+    <div class="relative z-10 flex flex-col min-h-screen">
 
-            <!-- Newsletter Signup Form (Front & Center) -->
-            <div class="mb-10">
-                <p class="text-xs tracking-widest text-purple-300/80 uppercase mb-3 font-normal">
-                    Join the Inner Circle
-                </p>
-                <p class="text-xs sm:text-sm text-purple-200/70 mb-4 font-light">
-                    Receive intimate acoustic demos, poetry, and early tour announcements.
-                </p>
+        <!-- HEADER / NAVIGATION -->
+        <header class="sticky top-0 z-50 glass-panel border-b border-amethyst-800/40">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-20 flex items-center justify-between">
+                
+                <!-- Vector SVG Logo -->
+                <a href="#" class="group flex items-center space-x-3 text-white transition-opacity hover:opacity-90 py-2" aria-label="Miriam O'Shea Home">
+                    <svg class="h-8 sm:h-10 w-auto text-white drop-shadow-md" viewBox="0 0 600 120" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none">
+                            <line x1="15" y1="60" x2="165" y2="60" />
+                            <path d="M 32 48 L 15 60 L 32 72" />
+                            <line x1="45" y1="50" x2="38" y2="70" />
+                            <line x1="72" y1="48" x2="72" y2="72" />
+                            <line x1="78" y1="48" x2="78" y2="72" />
+                            <line x1="84" y1="48" x2="84" y2="72" />
+                            <line x1="90" y1="48" x2="90" y2="72" />
+                            <line x1="110" y1="48" x2="124" y2="72" />
+                            <line x1="116" y1="48" x2="130" y2="72" />
+                            <line x1="122" y1="48" x2="136" y2="72" />
+                            <line x1="128" y1="48" x2="142" y2="72" />
+                        </g>
 
-                <form id="newsletter-form" onsubmit="handleSubscribe(event)" class="space-y-3">
-                    <div class="relative">
-                        <input 
-                            type="email" 
-                            id="email-input"
-                            required 
-                            placeholder="Enter your email address..." 
-                            class="w-full px-4 py-3.5 rounded-full bg-purple-950/40 border border-purple-300/20 text-purple-100 placeholder-purple-300/40 text-sm focus:outline-none focus:border-purple-300/60 focus:ring-1 focus:ring-purple-300/50 smooth-transition"
-                        >
-                    </div>
-                    <button 
-                        type="submit" 
-                        class="w-full py-3.5 px-6 rounded-full bg-purple-300/15 hover:bg-purple-300/25 border border-purple-200/30 text-purple-100 text-xs sm:text-sm tracking-widest uppercase font-medium glow-hover smooth-transition cursor-pointer"
-                    >
-                        Subscribe
+                        <g fill="currentColor" font-family="'Cinzel', 'Cormorant Garamond', serif" font-weight="700">
+                            <text x="300" y="52" text-anchor="middle" font-size="44" letter-spacing="3">MIRIAM</text>
+                            <text x="300" y="96" text-anchor="middle" font-size="40" letter-spacing="4">O'SHEA</text>
+                            <polygon points="230,80 234,85 230,90 226,85" />
+                        </g>
+
+                        <g stroke="currentColor" stroke-width="2.5" stroke-linecap="round" fill="none">
+                            <line x1="435" y1="60" x2="585" y2="60" />
+                            <path d="M 568 48 L 585 60 L 568 72" />
+                            <line x1="555" y1="50" x2="562" y2="70" />
+                            <line x1="450" y1="48" x2="450" y2="72" />
+                            <line x1="456" y1="48" x2="456" y2="72" />
+                            <line x1="462" y1="48" x2="462" y2="72" />
+                            <line x1="468" y1="48" x2="468" y2="72" />
+                            <line x1="500" y1="48" x2="500" y2="72" />
+                            <line x1="492" y1="60" x2="508" y2="60" stroke-width="1.5" />
+                        </g>
+                    </svg>
+                </a>
+
+                <!-- Desktop Nav -->
+                <nav class="hidden md:flex items-center space-x-8 text-xs font-medium tracking-[0.2em] text-amethyst-300 uppercase">
+                    <a href="#music" class="hover:text-white transition-colors py-1">Music</a>
+                    <a href="#about" class="hover:text-white transition-colors py-1">About</a>
+                    <a href="#tour" class="hover:text-white transition-colors py-1">Tour</a>
+                    <a href="#contact" class="hover:text-white transition-colors py-1">Contact</a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <a href="#music" class="hidden sm:inline-flex items-center justify-center px-4 py-2 border border-amethyst-400/40 rounded-full text-xs tracking-widest text-amethyst-200 uppercase hover:bg-amethyst-700/40 hover:border-amethyst-300 hover:text-white transition-all">
+                        Listen
+                    </a>
+                    <button id="mobile-menu-btn" class="md:hidden text-amethyst-300 hover:text-white p-2" aria-label="Toggle Navigation">
+                        <i class="fa-solid fa-bars text-xl"></i>
                     </button>
-                </form>
-
-                <!-- Status message box -->
-                <div id="status-message" class="hidden mt-3 text-xs text-purple-200/90 bg-purple-900/40 border border-purple-400/20 rounded-xl p-2.5"></div>
-            </div>
-
-            <div class="w-16 h-[1px] bg-purple-300/20 mx-auto mb-8"></div>
-
-            <!-- Streaming Platforms Section -->
-            <div>
-                <p class="text-xs tracking-widest text-purple-300/80 uppercase mb-4 font-normal">
-                    Listen Everywhere
-                </p>
-                <div class="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                    
-                    <!-- Spotify -->
-                    <a href="https://spotify.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-brands fa-spotify text-emerald-400 text-lg group-hover:scale-110 smooth-transition"></i>
-                            <span class="text-xs sm:text-sm font-light text-purple-100">Spotify</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
-                    </a>
-
-                    <!-- Apple Music -->
-                    <a href="https://music.apple.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-brands fa-apple text-pink-300 text-lg group-hover:scale-110 smooth-transition"></i>
-                            <span class="text-xs sm:text-sm font-light text-purple-100">Apple Music</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
-                    </a>
-
-                    <!-- Bandcamp -->
-                    <a href="https://bandcamp.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-brands fa-bandcamp text-sky-300 text-lg group-hover:scale-110 smooth-transition"></i>
-                            <span class="text-xs sm:text-sm font-light text-purple-100">Bandcamp</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
-                    </a>
-
-                    <!-- YouTube Music -->
-                    <a href="https://youtube.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-brands fa-youtube text-red-400 text-lg group-hover:scale-110 smooth-transition"></i>
-                            <span class="text-xs sm:text-sm font-light text-purple-100">YouTube</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
-                    </a>
-
-                    <!-- Soundcloud -->
-                    <a href="https://soundcloud.com" target="_blank" rel="noopener" class="flex items-center justify-between px-4 py-3 rounded-2xl bg-purple-950/30 border border-purple-300/10 hover:bg-purple-900/30 glow-hover smooth-transition group sm:col-span-2">
-                        <div class="flex items-center space-x-3">
-                            <i class="fa-brands fa-soundcloud text-orange-400 text-lg group-hover:scale-110 smooth-transition"></i>
-                            <span class="text-xs sm:text-sm font-light text-purple-100">SoundCloud</span>
-                        </div>
-                        <i class="fa-solid fa-arrow-up-right-from-square text-[10px] text-purple-300/40 group-hover:text-purple-300/80"></i>
-                    </a>
-
                 </div>
             </div>
 
-        </div>
-    </main>
+            <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-amethyst-800/40 px-6 py-6 space-y-4">
+                <a href="#music" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Music</a>
+                <a href="#about" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">About</a>
+                <a href="#tour" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Tour</a>
+                <a href="#contact" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Contact</a>
+            </div>
+        </header>
 
-    <!-- Footer -->
-    <footer class="w-full max-w-xl text-center z-10 mt-6 pt-4 text-purple-300/50 text-xs font-light">
-        <div class="flex justify-center space-x-6 mb-3">
-            <a href="https://instagram.com" aria-label="Instagram" class="hover:text-purple-200 smooth-transition"><i class="fa-brands fa-instagram text-base"></i></a>
-            <a href="https://tiktok.com" aria-label="TikTok" class="hover:text-purple-200 smooth-transition"><i class="fa-brands fa-tiktok text-base"></i></a>
-            <a href="mailto:booking@artist.com" aria-label="Email" class="hover:text-purple-200 smooth-transition"><i class="fa-regular fa-envelope text-base"></i></a>
-        </div>
-        <p>&copy; 2026 Mireille Vane. All rights reserved.</p>
-    </footer>
+        <!-- HERO SECTION -->
+        <section class="relative min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center text-center px-4 sm:px-6 py-16">
+            <div class="max-w-5xl mx-auto space-y-10">
+                
+                <!-- Main Center Hero Vector Logo -->
+                <div class="w-full max-w-3xl mx-auto px-2 flex justify-center items-center">
+                    <svg class="w-full max-w-2xl h-auto max-h-64 text-white drop-shadow-[0_8px_32px_rgba(0,0,0,0.85)] filter" viewBox="0 0 600 130" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                        <g stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none">
+                            <line x1="10" y1="65" x2="165" y2="65" />
+                            <path d="M 28 50 L 10 65 L 28 80" />
+                            <line x1="42" y1="52" x2="35" y2="78" />
+                            <line x1="70" y1="50" x2="70" y2="80" />
+                            <line x1="76" y1="50" x2="76" y2="80" />
+                            <line x1="82" y1="50" x2="82" y2="80" />
+                            <line x1="88" y1="50" x2="88" y2="80" />
+                            <line x1="110" y1="50" x2="125" y2="80" />
+                            <line x1="117" y1="50" x2="132" y2="80" />
+                            <line x1="124" y1="50" x2="139" y2="80" />
+                            <line x1="131" y1="50" x2="146" y2="80" />
+                        </g>
 
-    <!-- JavaScript Logic -->
+                        <g fill="currentColor">
+                            <text x="300" y="54" text-anchor="middle" font-family="'Cinzel', 'Cormorant Garamond', serif" font-weight="700" font-size="48" letter-spacing="4">MIRIAM</text>
+                            <text x="300" y="104" text-anchor="middle" font-family="'Cinzel', 'Cormorant Garamond', serif" font-weight="700" font-size="44" letter-spacing="5">O'SHEA</text>
+                            <polygon points="230,88 235,94 230,100 225,94" />
+                        </g>
+
+                        <g stroke="currentColor" stroke-width="2.8" stroke-linecap="round" fill="none">
+                            <line x1="435" y1="65" x2="590" y2="65" />
+                            <path d="M 572 50 L 590 65 L 572 80" />
+                            <line x1="558" y1="52" x2="565" y2="78" />
+                            <line x1="450" y1="50" x2="450" y2="80" />
+                            <line x1="456" y1="50" x2="456" y2="80" />
+                            <line x1="462" y1="50" x2="462" y2="80" />
+                            <line x1="468" y1="50" x2="468" y2="80" />
+                            <line x1="502" y1="50" x2="502" y2="80" />
+                            <line x1="492" y1="65" x2="512" y2="65" stroke-width="1.8" />
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Hero Social & Streaming Links Row -->
+                <div class="flex items-center justify-center space-x-5 text-amethyst-300 pt-1 pb-2">
+                    <!-- Spotify -->
+                    <a href="https://open.spotify.com/artist/0DY866dyn6XxODAyZ9X3V0" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-emerald-500/20 hover:border-emerald-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="Spotify">
+                        <i class="fa-brands fa-spotify text-xl group-hover:scale-110 transition-transform"></i>
+                    </a>
+
+                    <!-- YouTube -->
+                    <a href="https://www.youtube.com/channel/UC5FfhzzmLoZlGPIIOvJNR9g" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-red-500/20 hover:border-red-400 hover:text-red-400 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="YouTube">
+                        <i class="fa-brands fa-youtube text-xl group-hover:scale-110 transition-transform"></i>
+                    </a>
+
+                    <!-- Apple Music -->
+                    <a href="https://music.apple.com/ie/artist/miriam-oshea/1106293465" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-rose-400/20 hover:border-rose-300 hover:text-rose-300 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="Apple Music">
+                        <i class="fa-brands fa-apple text-xl group-hover:scale-110 transition-transform"></i>
+                    </a>
+
+                    <!-- Instagram -->
+                    <a href="https://www.instagram.com/miriamosheaofficial" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-pink-500/20 hover:border-pink-400 hover:text-pink-300 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="Instagram">
+                        <i class="fa-brands fa-instagram text-xl group-hover:scale-110 transition-transform"></i>
+                    </a>
+
+                    <!-- TikTok -->
+                    <a href="https://www.tiktok.com/@miriamosheaofficial" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-cyan-400/20 hover:border-cyan-300 hover:text-cyan-300 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="TikTok">
+                        <i class="fa-brands fa-tiktok text-lg group-hover:scale-110 transition-transform"></i>
+                    </a>
+                </div>
+
+                <!-- Single Title -->
+                <div class="space-y-3">
+                    <h2 class="font-cinzel text-2xl sm:text-3xl md:text-4xl tracking-[0.3em] text-white uppercase text-glow">
+                        FROZEN
+                    </h2>
+                    <p class="font-cormorant italic text-lg sm:text-xl text-amethyst-300 tracking-widest">
+                        • OUT NOW ON ALL PLATFORMS •
+                    </p>
+                </div>
+
+                <!-- Hero Buttons -->
+                <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+                    <a href="#player" class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-amethyst-300 text-amethyst-950 font-medium text-xs tracking-[0.2em] uppercase hover:bg-white transition-all shadow-[0_0_20px_rgba(184,168,200,0.25)]">
+                        Stream Single
+                    </a>
+                    <a href="#tour" class="w-full sm:w-auto px-8 py-3.5 rounded-full border border-amethyst-400/30 text-amethyst-200 font-medium text-xs tracking-[0.2em] uppercase hover:bg-amethyst-800/40 hover:border-amethyst-300 hover:text-white transition-all glass-panel">
+                        Live Dates
+                    </a>
+                </div>
+
+            </div>
+
+            <a href="#music" class="absolute bottom-6 left-1/2 -translate-x-1/2 text-amethyst-400 hover:text-white transition-colors animate-bounce">
+                <i class="fa-solid fa-chevron-down text-lg"></i>
+            </a>
+        </section>
+
+
+        <!-- MUSIC PLAYER -->
+        <section id="music" class="py-24 px-4 sm:px-6 lg:px-8 max-w-6xl mx-auto w-full">
+            <div class="text-center space-y-2 mb-12">
+                <p class="text-xs uppercase tracking-[0.3em] text-amethyst-400 font-medium">Discography</p>
+                <h3 class="font-cinzel text-3xl sm:text-4xl text-white tracking-wider">Featured Release</h3>
+                <div class="w-12 h-[1px] bg-amethyst-400/40 mx-auto mt-4"></div>
+            </div>
+
+            <div id="player" class="glass-panel rounded-2xl p-6 sm:p-10 mb-16 shadow-2xl relative overflow-hidden">
+                <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+                    
+                    <div class="lg:col-span-4 flex justify-center">
+                        <div class="relative w-56 h-56 sm:w-64 sm:h-64 rounded-xl overflow-hidden shadow-2xl border border-amethyst-400/20 group">
+                            <div class="absolute inset-0 bg-gradient-to-tr from-amethyst-950 via-amethyst-800 to-amethyst-600 flex items-center justify-center p-6 text-center">
+                                <div class="space-y-2">
+                                    <i class="fa-solid fa-compact-disc text-5xl text-amethyst-200/60 animate-spin-slow"></i>
+                                    <p class="font-cinzel text-lg tracking-widest text-white mt-2" id="current-track-title">Frozen</p>
+                                    <p class="font-cormorant italic text-sm text-amethyst-300">New Single</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="lg:col-span-8 space-y-6">
+                        <div>
+                            <span class="inline-block px-3 py-1 bg-amethyst-700/30 border border-amethyst-400/20 rounded-full text-[10px] tracking-widest uppercase text-amethyst-300 mb-2">Now Playing</span>
+                            <h4 id="player-track-name" class="font-cinzel text-2xl sm:text-3xl text-white tracking-wide">Frozen</h4>
+                            <p class="text-sm text-amethyst-300 font-light mt-1">Miriam O'Shea • Contemporary Soul </p>
+                        </div>
+
+                        <div class="space-y-2">
+                            <div class="flex items-center justify-between text-xs text-amethyst-400 font-mono">
+                                <span id="current-time">0:42</span>
+                                <span id="total-time">3:48</span>
+                            </div>
+                            <div id="progress-bar-bg" class="w-full h-2 bg-amethyst-950/80 rounded-full cursor-pointer relative overflow-hidden border border-amethyst-800/50">
+                                <div id="progress-bar" class="h-full bg-gradient-to-r from-amethyst-500 to-amethyst-300 w-1/4 rounded-full relative"></div>
+                            </div>
+                        </div>
+
+                        <div class="flex flex-wrap items-center justify-between gap-4 pt-2">
+                            <div class="flex items-center space-x-6">
+                                <button id="prev-btn" class="text-amethyst-400 hover:text-white transition-colors" aria-label="Previous Track">
+                                    <i class="fa-solid fa-backward-step text-xl"></i>
+                                </button>
+                                <button id="play-btn" class="w-14 h-14 rounded-full bg-amethyst-300 hover:bg-white text-amethyst-950 flex items-center justify-center transition-all transform hover:scale-105 shadow-lg" aria-label="Play Track">
+                                    <i id="play-icon" class="fa-solid fa-play text-lg translate-x-0.5"></i>
+                                </button>
+                                <button id="next-btn" class="text-amethyst-400 hover:text-white transition-colors" aria-label="Next Track">
+                                    <i class="fa-solid fa-forward-step text-xl"></i>
+                                </button>
+                            </div>
+
+                            <div class="flex items-center space-x-4 text-amethyst-300">
+                                <a href="#" class="hover:text-emerald-400 transition-colors" title="Spotify"><i class="fa-brands fa-spotify text-2xl"></i></a>
+                                <a href="#" class="hover:text-rose-400 transition-colors" title="Apple Music"><i class="fa-brands fa-apple text-2xl"></i></a>
+                                <a href="#" class="hover:text-red-500 transition-colors" title="YouTube Music"><i class="fa-brands fa-youtube text-2xl"></i></a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tracks Grid -->
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+                <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" data-title="Frozen">
+                    <div class="aspect-square rounded-lg bg-gradient-to-br from-amethyst-800 to-amethyst-950 flex flex-col items-center justify-center p-4 text-center relative group overflow-hidden border border-amethyst-700/30">
+                        <i class="fa-solid fa-snowflake text-3xl text-amethyst-400/50 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-cinzel text-sm text-amethyst-200 uppercase tracking-widest">Single</span>
+                    </div>
+                    <div>
+                        <h5 class="font-cinzel text-base text-white tracking-wide">Frozen</h5>
+                        <p class="text-xs text-amethyst-400 mt-0.5">2026 • Original Single</p>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" data-title="Amhrán Mhuínse">
+                    <div class="aspect-square rounded-lg bg-gradient-to-br from-amethyst-900 to-amethyst-800 flex flex-col items-center justify-center p-4 text-center relative group overflow-hidden border border-amethyst-700/30">
+                        <i class="fa-solid fa-water text-3xl text-amethyst-400/50 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-cinzel text-sm text-amethyst-200 uppercase tracking-widest">Traditional </span>
+                    </div>
+                    <div>
+                        <h5 class="font-cinzel text-base text-white tracking-wide">Amhrán Mhuínse</h5>
+                        <p class="text-xs text-amethyst-400 mt-0.5">2027  • Traditional [Unreleased]</p>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" data-title="On Raglan Road">
+                    <div class="aspect-square rounded-lg bg-gradient-to-br from-amethyst-800 to-amethyst-900 flex flex-col items-center justify-center p-4 text-center relative group overflow-hidden border border-amethyst-700/30">
+                        <i class="fa-solid fa-leaf text-3xl text-amethyst-400/50 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-cinzel text-sm text-amethyst-200 uppercase tracking-widest">Traditional</span>
+                    </div>
+                    <div>
+                        <h5 class="font-cinzel text-base text-white tracking-wide">On Raglan Road</h5>
+                        <p class="text-xs text-amethyst-400 mt-0.5">2027  • Traditional [Unreleased]</p>
+                    </div>
+                </div>
+
+                <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" data-title="She Moved Through the Fair">
+                    <div class="aspect-square rounded-lg bg-gradient-to-br from-amethyst-950 to-amethyst-800 flex flex-col items-center justify-center p-4 text-center relative group overflow-hidden border border-amethyst-700/30">
+                        <i class="fa-solid fa-wind text-3xl text-amethyst-400/50 mb-2 group-hover:scale-110 transition-transform"></i>
+                        <span class="font-cinzel text-sm text-amethyst-200 uppercase tracking-widest">Ballad</span>
+                    </div>
+                    <div>
+                        <h5 class="font-cinzel text-base text-white tracking-wide">She Moved Through the Fair</h5>
+                        <p class="text-xs text-amethyst-400 mt-0.5">2027  • Traditional [Unreleased]</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- ABOUT SECTION -->
+        <section id="about" class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+            <div class="glass-panel rounded-3xl p-8 sm:p-14">
+                <div class="grid grid-cols-1 md:grid-cols-12 gap-10 items-center">
+                    <div class="md:col-span-5 space-y-4 text-center md:text-left">
+                        <div class="inline-block p-4 border border-amethyst-400/30 rounded-2xl bg-amethyst-900/40">
+                            <svg class="w-28 h-28 mx-auto text-amethyst-300" viewBox="0 0 100 100" fill="none">
+                                <circle cx="50" cy="50" r="45" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4"/>
+                                <path d="M50 15 C 30 40, 30 60, 50 85 C 70 60, 70 40, 50 15 Z" stroke="currentColor" stroke-width="1.5" fill="none"/>
+                                <circle cx="50" cy="50" r="5" fill="currentColor"/>
+                            </svg>
+                        </div>
+                        <h4 class="font-cinzel text-xl text-amethyst-200 tracking-widest uppercase">Traditional Roots</h4>
+                        <p class="font-cormorant italic text-amethyst-300 text-lg">"Music woven from mist, ocean tides, and timeless memory."</p>
+                    </div>
+
+                    <div class="md:col-span-7 space-y-6 text-amethyst-200 font-light leading-relaxed">
+                        <div class="space-y-2">
+                            <p class="text-xs uppercase tracking-[0.3em] text-amethyst-400 font-medium">Biography</p>
+                            <h3 class="font-cinzel text-3xl text-white tracking-wide">Miriam O'Shea</h3>
+                        </div>
+                        <p class="text-sm sm:text-base">
+                            Born to a Moroccan father and Irish mother, Miriam O’Shea grew up between the Atlas Mountains in Morocco and Inishbofin Island in the west of Ireland. All of it shows up in her music: She weaves Sean Nós and Berber intonations with soul and jazz. 
+                        </p>
+                        <p class="text-sm sm:text-base text-amethyst-300">
+                            With her first EP scheduled for release in Winter 2027 following "Frozen", Miriam continues to craft a distinctive sound—fluid, ethereal, and deeply soulful.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- TOUR DATES -->
+        <section id="tour" class="py-24 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto w-full">
+            <div class="text-center space-y-2 mb-12">
+                <p class="text-xs uppercase tracking-[0.3em] text-amethyst-400 font-medium">Performances</p>
+                <h3 class="font-cinzel text-3xl sm:text-4xl text-white tracking-wider">Live Dates</h3>
+                <div class="w-12 h-[1px] bg-amethyst-400/40 mx-auto mt-4"></div>
+            </div>
+
+            <div class="space-y-4">
+                <div class="glass-card rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-6 w-full sm:w-auto">
+                        <div class="text-center min-w-[60px]">
+                            <span class="block font-cinzel text-2xl text-white font-bold">15</span>
+                            <span class="block text-xs uppercase tracking-widest text-amethyst-400">SEPT</span>
+                        </div>
+                        <div class="border-l border-amethyst-700/50 pl-6">
+                            <h5 class="font-cinzel text-lg text-white">Karimas House Concert</h5>
+                            <p class="text-xs text-amethyst-300">Clare, Ireland</p>
+                        </div>
+                    </div>
+                    <a href="#" class="px-5 py-2 border border-amethyst-400/30 rounded-full text-xs uppercase tracking-widest text-amethyst-200 hover:bg-amethyst-300 hover:text-amethyst-950 transition-all">Past Date</a>
+                </div>
+
+                <div class="glass-card rounded-xl p-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+                    <div class="flex items-center space-x-6 w-full sm:w-auto">
+                        <div class="text-center min-w-[60px]">
+                            <span class="block font-cinzel text-2xl text-white font-bold">17</span>
+                            <span class="block text-xs uppercase tracking-widest text-amethyst-400">SEPT</span>
+                        </div>
+                        <div class="border-l border-amethyst-700/50 pl-6">
+                            <h5 class="font-cinzel text-lg text-white">The Lutherhaus</h5>
+                            <p class="text-xs text-amethyst-300">Dublin, Ireland</p>
+                        </div>
+                    </div>
+                    <a href="#" class="px-5 py-2 border border-amethyst-400/30 rounded-full text-xs uppercase tracking-widest text-amethyst-200 hover:bg-amethyst-300 hover:text-amethyst-950 transition-all">Past Date</a>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- SIMPLIFIED INNER CIRCLE NEWSLETTER SECTION -->
+        <section id="contact" class="py-24 px-4 sm:px-6 lg:px-8 max-w-2xl mx-auto w-full">
+            <div class="glass-panel rounded-3xl p-8 sm:p-12 text-center space-y-8 relative overflow-hidden shadow-2xl">
+                
+                <div class="space-y-3">
+                    <span class="inline-block px-3.5 py-1 bg-amethyst-800/40 border border-amethyst-400/20 rounded-full text-[10px] tracking-[0.25em] uppercase text-amethyst-300 font-medium">Newsletter & Contact</span>
+                    <h3 class="font-cinzel text-3xl sm:text-4xl text-white tracking-wider text-glow">Join the Inner Circle</h3>
+                    <p class="font-cormorant italic text-lg sm:text-xl text-amethyst-300 tracking-wide max-w-md mx-auto">
+                        Receive intimate demos and early tour announcements
+                    </p>
+                    
+                    <!-- Official Email Address Display -->
+                    <div class="pt-2 flex items-center justify-center space-x-2 text-amethyst-200">
+                        <i class="fa-regular fa-envelope text-xs text-amethyst-400"></i>
+                        <a href="mailto:info@miriamoshea.com" class="text-xs sm:text-sm font-sans tracking-widest text-amethyst-200 hover:text-white transition-colors underline decoration-amethyst-500/40 underline-offset-4">
+                            info@miriamoshea.com
+                        </a>
+                    </div>
+                </div>
+
+                <!-- Minimal Subscription Form -->
+                <form id="contact-form" class="space-y-4 max-w-md mx-auto">
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <input type="email" id="user-email" required placeholder="Enter your email" class="flex-1 px-5 py-3.5 bg-amethyst-950/70 border border-amethyst-400/30 rounded-full text-sm text-white placeholder-amethyst-400/60 focus:outline-none focus:border-amethyst-200 focus:ring-1 focus:ring-amethyst-200 transition-all">
+                        <button type="submit" class="px-8 py-3.5 rounded-full bg-amethyst-300 text-amethyst-950 font-medium text-xs tracking-[0.2em] uppercase hover:bg-white transition-all shadow-[0_0_25px_rgba(184,168,200,0.3)] shrink-0">
+                            Subscribe
+                        </button>
+                    </div>
+                </form>
+
+                <!-- Confirmation Toast -->
+                <div id="contact-success" class="hidden absolute inset-0 bg-amethyst-950/95 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-4">
+                    <div class="w-12 h-12 rounded-full bg-amethyst-700/30 border border-amethyst-400/40 flex items-center justify-center text-amethyst-200">
+                        <i class="fa-solid fa-check text-xl"></i>
+                    </div>
+                    <h4 class="font-cinzel text-2xl text-white tracking-wide">Welcome to the Circle</h4>
+                    <p class="text-sm text-amethyst-300 max-w-sm font-light">
+                        Thank you for subscribing. Look out for updates directly in your inbox.
+                    </p>
+                    <button id="reset-contact-btn" class="mt-2 px-5 py-2 border border-amethyst-400/30 rounded-full text-[10px] tracking-widest text-amethyst-200 uppercase hover:bg-amethyst-700/40 hover:text-white transition-all">
+                        Close
+                    </button>
+                </div>
+
+            </div>
+        </section>
+
+
+        <!-- FOOTER -->
+        <footer class="mt-auto py-8 border-t border-amethyst-800/30 text-center text-xs text-amethyst-400 space-y-2">
+            <p>&copy; 2026 Miriam O'Shea. All Rights Reserved.</p>
+            <p class="font-cormorant italic text-amethyst-500 text-sm">miriamoshea.com</p>
+        </footer>
+
+    </div>
+
+    <!-- WATER WAVE PHYSICS + VIDEO AUTOPLAY LOGIC -->
     <script>
-        function handleSubscribe(event) {
-            event.preventDefault();
-            const emailInput = document.getElementById('email-input');
-            const statusMessage = document.getElementById('status-message');
+        // ========================================================
+        // 1. GUARANTEED WATER WAVE CANVAS SIMULATION
+        // ========================================================
+        const canvas = document.getElementById('water-canvas');
+        const ctx = canvas.getContext('2d');
+
+        function resizeCanvas() {
+            canvas.width = window.innerWidth;
+            canvas.height = window.innerHeight;
+        }
+        window.addEventListener('resize', resizeCanvas);
+        resizeCanvas();
+
+        let step = 0;
+        function animateWater() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
             
-            if (emailInput.value) {
-                // Display success message
-                statusMessage.textContent = 'Welcome to the circle. Check your inbox soon for misty melodies.';
-                statusMessage.classList.remove('hidden');
-                
-                // Reset input
-                emailInput.value = '';
-                
-                // Hide message after 5 seconds
-                setTimeout(() => {
-                    statusMessage.classList.add('hidden');
-                }, 5000);
+            // Generate multiple organic fluid ocean wave layers
+            const waveLayers = [
+                { amplitude: 18, length: 0.008, speed: 0.015, color: 'rgba(66, 49, 82, 0.45)', offset: 0 },
+                { amplitude: 26, length: 0.005, speed: 0.012, color: 'rgba(40, 29, 50, 0.55)', offset: 100 },
+                { amplitude: 35, length: 0.003, speed: 0.008, color: 'rgba(28, 21, 34, 0.70)', offset: 200 }
+            ];
+
+            step += 1;
+
+            waveLayers.forEach((wave) => {
+                ctx.fillStyle = wave.color;
+                ctx.beginPath();
+                ctx.moveTo(0, canvas.height);
+
+                for (let x = 0; x <= canvas.width; x += 10) {
+                    const y = Math.sin(x * wave.length + step * wave.speed) * wave.amplitude 
+                            + Math.cos((x + step) * 0.002) * (wave.amplitude * 0.5) 
+                            + (canvas.height * 0.4) + wave.offset;
+                    ctx.lineTo(x, y);
+                }
+
+                ctx.lineTo(canvas.width, canvas.height);
+                ctx.closePath();
+                ctx.fill();
+            });
+
+            requestAnimationFrame(animateWater);
+        }
+        animateWater();
+
+        // ========================================================
+        // 2. FORCE PLAY HTML5 BACKGROUND VIDEO
+        // ========================================================
+        const video = document.getElementById('hero-video');
+        if (video) {
+            video.muted = true;
+            const playPromise = video.play();
+            if (playPromise !== undefined) {
+                playPromise.then(() => {
+                    video.style.opacity = '0.85';
+                }).catch(() => {
+                    // Video autoplay restricted by browser policies:
+                    // Smoothly rely on active canvas water physics animation background!
+                    video.style.opacity = '0';
+                });
             }
+        }
+
+        // ========================================================
+        // 3. MUSIC PLAYER INTERACTION
+        // ========================================================
+        let isPlaying = false;
+        const playBtn = document.getElementById('play-btn');
+        const playIcon = document.getElementById('play-icon');
+        const playerTrackName = document.getElementById('player-track-name');
+        const currentTrackTitle = document.getElementById('current-track-title');
+
+        playBtn.addEventListener('click', () => {
+            isPlaying = !isPlaying;
+            if (isPlaying) {
+                playIcon.classList.remove('fa-play', 'translate-x-0.5');
+                playIcon.classList.add('fa-pause');
+            } else {
+                playIcon.classList.remove('fa-pause');
+                playIcon.classList.add('fa-play', 'translate-x-0.5');
+            }
+        });
+
+        document.querySelectorAll('.track-card').forEach(card => {
+            card.addEventListener('click', () => {
+                const title = card.getAttribute('data-title');
+                playerTrackName.textContent = title;
+                currentTrackTitle.textContent = title;
+                isPlaying = true;
+                playIcon.classList.remove('fa-play', 'translate-x-0.5');
+                playIcon.classList.add('fa-pause');
+                document.getElementById('player').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            });
+        });
+
+        // Mobile Menu Toggle
+        const mobileMenuBtn = document.getElementById('mobile-menu-btn');
+        const mobileMenu = document.getElementById('mobile-menu');
+        mobileMenuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+
+        // Contact Form Submission Handling
+        const contactForm = document.getElementById('contact-form');
+        const contactSuccess = document.getElementById('contact-success');
+        const resetContactBtn = document.getElementById('reset-contact-btn');
+
+        if (contactForm) {
+            contactForm.addEventListener('submit', (e) => {
+                e.preventDefault();
+                contactSuccess.classList.remove('hidden');
+                contactForm.reset();
+            });
+        }
+
+        if (resetContactBtn) {
+            resetContactBtn.addEventListener('click', () => {
+                contactSuccess.classList.add('hidden');
+            });
         }
     </script>
 </body>
