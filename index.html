@@ -13,11 +13,10 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Montserrat:wght@200;300;400;500&display=swap" rel="stylesheet">
 
-    <!-- Brevo Form Stylesheet -->
+    <!-- Brevo Form Stylesheet (Required for background validation engine) -->
     <link rel="stylesheet" href="https://sibforms.com/forms/end-form/build/sib-styles.css">
     <style>
-      :where(.sib-form-message-panel) { display: none; }
-      :where(.sib-form-message-panel .sib-notification__icon) { width: 20px; height: 20px; }
+      :where(.sib-form-message-panel) { display: none !important; }
       #sib-container input::placeholder { color: #b8a8c8; }
     </style>
 
@@ -65,7 +64,6 @@
             z-index: 0;
             overflow: hidden;
             pointer-events: none;
-            /* Added Unsplash background fallback for mobile devices where video autoplay is restricted */
             background-image: url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=1920&q=80');
             background-size: cover;
             background-position: center;
@@ -548,28 +546,15 @@
                     </div>
                 </div>
 
-                <!-- BREVO EMBEDDED FORM WRAPPER -->
+                <!-- BREVO FORM WRAPPER (HIDDEN SYSTEM MESSAGES & REAL FORM) -->
                 <div class="sib-form max-w-md mx-auto" style="text-align: center; background-color: transparent;">
                   <div id="sib-form-container" class="sib-form-container">
                     
-                    <!-- Error Message Panel -->
-                    <div id="error-message" class="sib-form-message-panel hidden p-4 mb-4 text-left text-red-200 bg-red-900/60 border border-red-500/50 rounded-xl text-sm">
-                      <div class="sib-form-message-panel__text sib-form-message-panel__text--center flex items-center space-x-2">
-                        <i class="fa-solid fa-circle-exclamation text-red-400"></i>
-                        <span class="sib-form-message-panel__inner-text">Your subscription could not be saved. Please try again.</span>
-                      </div>
-                    </div>
+                    <!-- Hidden native error panel -->
+                    <div id="error-message" class="sib-form-message-panel hidden"></div>
 
-                    <!-- Success Message Panel -->
-                    <div id="success-message" class="sib-form-message-panel hidden p-6 mb-4 text-center text-emerald-200 bg-emerald-950/80 border border-emerald-500/40 rounded-2xl space-y-2">
-                      <div class="w-10 h-10 mx-auto rounded-full bg-emerald-800/40 border border-emerald-400/40 flex items-center justify-center text-emerald-200">
-                        <i class="fa-solid fa-check text-base"></i>
-                      </div>
-                      <h4 class="font-cinzel text-xl text-white tracking-wide">Welcome to the Circle</h4>
-                      <p class="sib-form-message-panel__inner-text text-xs text-emerald-300 font-light">
-                        Thank you for subscribing. Look out for updates directly in your inbox.
-                      </p>
-                    </div>
+                    <!-- Hidden native success panel -->
+                    <div id="success-message" class="sib-form-message-panel hidden"></div>
 
                     <div id="sib-container" class="sib-container--large sib-container--vertical" style="background-color: transparent; border: none;">
                       <form id="sib-form" method="POST" action="https://553711c5.sibforms.com/serve/MUIFAANbRl47U2RLdpfaQpUGuCs6yVqoxxMgWCfPPKTEHmahiYBQFPaTd32BLIa3EJsJmovD8kRuZU0xEUMXgG3ENmq9yPZR6iovzIBVc9fwUt0Ir-Z3uX5bWjMZ-DrC_ZSwD23rcrNNDFf1lmAnKwr_jKDNN1s9XWDxNHZ9wxe02OXkAw2tgqnNwZOynE_ZPc4qSVrgGdonu_oiNQ==" data-type="subscription" class="space-y-4">
@@ -599,6 +584,19 @@
                   </div>
                 </div>
 
+                <!-- RESTORED CUSTOM WELCOME POPUP MODAL (SHOWS UPON SUBMISSION) -->
+                <div id="contact-success" class="hidden absolute inset-0 bg-amethyst-950/95 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-4 z-20">
+                    <div class="w-12 h-12 rounded-full bg-amethyst-700/30 border border-amethyst-400/40 flex items-center justify-center text-amethyst-200">
+                        <i class="fa-solid fa-check text-xl"></i>
+                    </div>
+                    <h4 class="font-cinzel text-2xl text-white tracking-wide">Welcome to the Circle</h4>
+                    <p class="text-sm text-amethyst-300 max-w-sm font-light">
+                        Thank you for subscribing. Look out for updates directly in your inbox.
+                    </p>
+                    <button id="reset-contact-btn" class="mt-2 px-5 py-2 border border-amethyst-400/30 rounded-full text-[10px] tracking-widest text-amethyst-200 uppercase hover:bg-amethyst-700/40 hover:text-white transition-all cursor-pointer">
+                        Close
+                    </button>
+                </div>
             </div>
         </section>
 
@@ -787,9 +785,19 @@
         mobileMenuBtn.addEventListener('click', () => {
             mobileMenu.classList.toggle('hidden');
         });
+
+        // Custom Welcome Modal Interactions
+        const contactSuccess = document.getElementById('contact-success');
+        const resetContactBtn = document.getElementById('reset-contact-btn');
+
+        if (resetContactBtn) {
+            resetContactBtn.addEventListener('click', () => {
+                contactSuccess.classList.add('hidden');
+            });
+        }
     </script>
 
-    <!-- Brevo Validation & Processing Script -->
+    <!-- Brevo Validation & Success Detection Script -->
     <script>
       window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
       window.LOCALE = 'en';
@@ -802,5 +810,25 @@
       var AUTOHIDE = Boolean(0);
     </script>
     <script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
+
+    <script>
+        // Intercept Brevo's background submission response to trigger your custom welcome overlay modal
+        window.addEventListener('DOMContentLoaded', () => {
+            const successPanel = document.getElementById('success-message');
+            const contactSuccessModal = document.getElementById('contact-success');
+            const sibForm = document.getElementById('sib-form');
+
+            if (successPanel && contactSuccessModal) {
+                // Observer watches for Brevo script toggling its internal success message panel
+                const observer = new MutationObserver(() => {
+                    if (!successPanel.classList.contains('hidden') || successPanel.style.display === 'block') {
+                        contactSuccessModal.classList.remove('hidden');
+                        if (sibForm) sibForm.reset();
+                    }
+                });
+                observer.observe(successPanel, { attributes: true, attributeFilter: ['class', 'style'] });
+            }
+        });
+    </script>
 </body>
 </html>
