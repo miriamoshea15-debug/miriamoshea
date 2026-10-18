@@ -536,14 +536,38 @@
                     </div>
                 </div>
 
-                <form id="contact-form" class="space-y-4 max-w-md mx-auto">
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <input type="email" id="user-email" required placeholder="Enter your email" class="flex-1 px-5 py-3.5 bg-amethyst-950/70 border border-amethyst-400/30 rounded-full text-sm text-white placeholder-amethyst-400/60 focus:outline-none focus:border-amethyst-200 focus:ring-1 focus:ring-amethyst-200 transition-all">
-                        <button type="submit" class="px-8 py-3.5 rounded-full bg-amethyst-300 text-amethyst-950 font-medium text-xs tracking-[0.2em] uppercase hover:bg-white transition-all shadow-[0_0_25px_rgba(184,168,200,0.3)] shrink-0">
-                            Subscribe
-                        </button>
-                    </div>
-                </form>
+                <form 
+  action="https://553711c5.sibforms.com/serve/MUIFAANbRl47U2RLdpfaQpUGuCs6yVqoxxMgWCfPPKTEHmahiYBQFPaTd32BLIa3EJsJmovD8kRuZU0xEUMXgG3ENmq9yPZR6iovzIBVc9fwUt0Ir-Z3uX5bWjMZ-DrC_ZSwD23rcrNNDFf1lmAnKwr_jKDNN1s9XWDxNHZ9wxe02OXkAw2tgqnNwZOynE_ZPc4qSVrgGdonu_oiNQ==" 
+  method="POST" 
+  id="sib-form" 
+  data-type="subscription" 
+  class="space-y-4"
+>
+    <!-- Hidden fields required by Brevo -->
+    <input type="text" name="email_address_check" value="" class="hidden" style="display:none !important;">
+    <input type="hidden" name="locale" value="en">
+
+    <!-- Your existing styled email input -->
+    <div class="relative">
+        <input 
+            type="email" 
+            id="EMAIL" 
+            name="EMAIL" 
+            required 
+            autocomplete="off" 
+            placeholder="Enter your email" 
+            class="w-full px-5 py-3.5 bg-white/5 border border-white/10 rounded-full text-white placeholder-gray-400 focus:outline-none focus:border-purple-500 transition-colors shadow-inner"
+        >
+    </div>
+
+    <!-- Your existing styled submit button -->
+    <button 
+        type="submit" 
+        class="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-full transition-colors shadow-lg shadow-purple-600/30 flex items-center justify-center space-x-2"
+    >
+        <span>Subscribe</span>
+    </button>
+</form>
 
                 <div id="contact-success" class="hidden absolute inset-0 bg-amethyst-950/95 backdrop-blur-md rounded-3xl p-8 flex flex-col items-center justify-center text-center space-y-4">
                     <div class="w-12 h-12 rounded-full bg-amethyst-700/30 border border-amethyst-400/40 flex items-center justify-center text-amethyst-200">
@@ -763,5 +787,26 @@
             });
         }
     </script>
+    <!-- Brevo Integration Scripts -->
+<script>
+  window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
+  window.LOCALE = 'en';
+  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank.";
+  window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_NUMBER = "The information provided is invalid. Please review the field format and try again.";
+  window.INVALID_DATE = "Please enter a valid date";
+  window.REQUIRED_MULTISELECT_MESSAGE = 'Please select at least 1 option';
+  window.translation = {
+    common: {
+      selectedList: '{quantity} list selected',
+      selectedLists: '{quantity} lists selected',
+      selectedOption: '{quantity} selected',
+      selectedOptions: '{quantity} selected',
+    }
+  };
+  var AUTOHIDE = Boolean(0);
+</script>
+<script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 </body>
 </html>
