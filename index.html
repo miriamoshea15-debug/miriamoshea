@@ -145,7 +145,7 @@
 
     <!-- HIDDEN HTML5 AUDIO ELEMENT -->
     <audio id="audio-source" preload="metadata">
-        <source src="frozen.mp3" type="audio/mpeg">
+        <source id="audio-source-file" src="frozen.mp3" type="audio/mpeg">
         Your browser does not support the audio element.
     </audio>
 
@@ -374,6 +374,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <!-- Frozen Track Card -->
                 <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" 
+                     data-audio="frozen.mp3"
                      data-title="Frozen" 
                      data-subtitle="New Single" 
                      data-artist="Miriam O'Shea • Contemporary Soul"
@@ -392,6 +393,7 @@
                 </div>
 
                 <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" 
+                     data-audio="amhran-mhuinse.mp3"
                      data-title="Amhrán Mhuínse" 
                      data-subtitle="Traditional" 
                      data-artist="Miriam O'Shea • Sean Nós Ballad"
@@ -410,6 +412,7 @@
                 </div>
 
                 <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" 
+                     data-audio="on-raglan-road.mp3"
                      data-title="On Raglan Road" 
                      data-subtitle="Traditional" 
                      data-artist="Miriam O'Shea • Irish Folk Classic"
@@ -428,6 +431,7 @@
                 </div>
 
                 <div class="glass-card rounded-xl p-5 space-y-4 cursor-pointer track-card" 
+                     data-audio="she-moved-through-the-fair.mp3"
                      data-title="She Moved Through the Fair" 
                      data-subtitle="Ballad" 
                      data-artist="Miriam O'Shea • Traditional Ballad"
@@ -633,6 +637,7 @@
         // HTML5 AUDIO PLAYER HOOKS & TIMELINE LOGIC
         // ========================================================
         const audioElement = document.getElementById('audio-source');
+        const audioSourceFile = document.getElementById('audio-source-file');
         let isPlaying = false;
         const playBtn = document.getElementById('play-btn');
         const playIcon = document.getElementById('play-icon');
@@ -693,9 +698,10 @@
             audioElement.currentTime = 0;
         });
 
-        // Clicking track cards updates player details and active streaming links
+        // Clicking track cards updates player details, audio source, and active streaming links
         document.querySelectorAll('.track-card').forEach(card => {
             card.addEventListener('click', () => {
+                const audioFile = card.getAttribute('data-audio');
                 const title = card.getAttribute('data-title');
                 const subtitle = card.getAttribute('data-subtitle');
                 const artist = card.getAttribute('data-artist');
@@ -705,15 +711,30 @@
                 const youtubeUrl = card.getAttribute('data-youtube');
                 const soundcloudUrl = card.getAttribute('data-soundcloud');
 
+                // Update text elements
                 document.getElementById('player-track-name').textContent = title;
                 document.getElementById('current-track-title').textContent = title;
                 document.getElementById('current-track-subtitle').textContent = subtitle;
                 document.getElementById('player-track-artist').textContent = artist;
 
+                // Update links
                 document.getElementById('player-spotify').href = spotifyUrl;
                 document.getElementById('player-apple').href = appleUrl;
                 document.getElementById('player-youtube').href = youtubeUrl;
                 document.getElementById('player-soundcloud').href = soundcloudUrl;
+
+                // Switch audio source and load
+                audioSourceFile.src = audioFile;
+                audioElement.load();
+
+                // Automatically start playing the selected track
+                audioElement.play().then(() => {
+                    isPlaying = true;
+                    playIcon.classList.remove('fa-play', 'translate-x-0.5');
+                    playIcon.classList.add('fa-pause');
+                }).catch(err => {
+                    console.log("Auto-play prevented:", err);
+                });
 
                 document.getElementById('player').scrollIntoView({ behavior: 'smooth', block: 'center' });
             });
