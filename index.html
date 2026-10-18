@@ -536,18 +536,21 @@
                     </div>
                 </div>
 
-                <form 
+<!-- Hidden iframe target for Brevo submission -->
+<iframe name="brevo_iframe" id="brevo_iframe" style="display:none;"></iframe>
+
+<form 
   action="https://553711c5.sibforms.com/serve/MUIFAANbRl47U2RLdpfaQpUGuCs6yVqoxxMgWCfPPKTEHmahiYBQFPaTd32BLIa3EJsJmovD8kRuZU0xEUMXgG3ENmq9yPZR6iovzIBVc9fwUt0Ir-Z3uX5bWjMZ-DrC_ZSwD23rcrNNDFf1lmAnKwr_jKDNN1s9XWDxNHZ9wxe02OXkAw2tgqnNwZOynE_ZPc4qSVrgGdonu_oiNQ==" 
   method="POST" 
-  id="sib-form" 
-  data-type="subscription" 
+  target="brevo_iframe"
+  id="contact-form" 
   class="space-y-4"
 >
     <!-- Hidden fields required by Brevo -->
-    <input type="text" name="email_address_check" value="" class="hidden" style="display:none !important;">
+    <input type="text" name="email_address_check" value="" style="display:none !important;">
     <input type="hidden" name="locale" value="en">
 
-    <!-- Your existing styled email input -->
+    <!-- Email Input -->
     <div class="relative">
         <input 
             type="email" 
@@ -560,10 +563,11 @@
         >
     </div>
 
-    <!-- Your existing styled submit button -->
+    <!-- Submit Button -->
     <button 
         type="submit" 
-        class="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-full transition-colors shadow-lg shadow-purple-600/30 flex items-center justify-center space-x-2"
+        id="contact-submit-btn"
+        class="w-full py-3.5 bg-purple-600 hover:bg-purple-700 text-white font-medium rounded-full transition-colors shadow-lg shadow-purple-600/30 flex items-center justify-center space-x-2 cursor-pointer"
     >
         <span>Subscribe</span>
     </button>
@@ -786,27 +790,30 @@
                 contactSuccess.classList.add('hidden');
             });
         }
-    </script>
-    <!-- Brevo Integration Scripts -->
-<script>
-  window.REQUIRED_CODE_ERROR_MESSAGE = 'Please choose a country code';
-  window.LOCALE = 'en';
-  window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
-  window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank.";
-  window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
-  window.INVALID_NUMBER = "The information provided is invalid. Please review the field format and try again.";
-  window.INVALID_DATE = "Please enter a valid date";
-  window.REQUIRED_MULTISELECT_MESSAGE = 'Please select at least 1 option';
-  window.translation = {
-    common: {
-      selectedList: '{quantity} list selected',
-      selectedLists: '{quantity} lists selected',
-      selectedOption: '{quantity} selected',
-      selectedOptions: '{quantity} selected',
-    }
-  };
-  var AUTOHIDE = Boolean(0);
+   <script>
+  const contactForm = document.getElementById('contact-form');
+  const contactSuccess = document.getElementById('contact-success');
+  const resetContactBtn = document.getElementById('reset-contact-btn');
+
+  if (contactForm) {
+      contactForm.addEventListener('submit', () => {
+          // Display your custom "Welcome to the Circle" glass card overlay
+          setTimeout(() => {
+              if (contactSuccess) {
+                  contactSuccess.classList.remove('hidden');
+              }
+              contactForm.reset();
+          }, 300);
+      });
+  }
+
+  if (resetContactBtn) {
+      resetContactBtn.addEventListener('click', () => {
+          if (contactSuccess) {
+              contactSuccess.classList.add('hidden');
+          }
+      });
+  }
 </script>
-<script defer src="https://sibforms.com/forms/end-form/build/main.js"></script>
 </body>
 </html>
