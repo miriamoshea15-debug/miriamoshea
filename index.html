@@ -774,13 +774,16 @@
             const sibForm = document.getElementById('sib-form');
 
             if (successPanel && contactSuccessModal) {
-                const observer = new MutationObserver(() => {
-                    if (!successPanel.classList.contains('hidden') || successPanel.style.display === 'block' || successPanel.innerHTML.trim() !== '') {
-                        contactSuccessModal.classList.remove('hidden');
-                        if (sibForm) sibForm.reset();
-                    }
+                const observer = new MutationObserver((mutations) => {
+                    mutations.forEach((mutation) => {
+                        // Check if Brevo populated the success message text or made the panel visible
+                        if (successPanel.innerText.trim() !== '' && !successPanel.classList.contains('hidden')) {
+                            contactSuccessModal.classList.remove('hidden');
+                            if (sibForm) sibForm.reset();
+                        }
+                    });
                 });
-                observer.observe(successPanel, { childList: true, subtree: true, attributes: true, attributeFilter: ['class', 'style'] });
+                observer.observe(successPanel, { childList: true, subtree: true, characterData: true, attributes: true, attributeFilter: ['class', 'style'] });
             }
         });
     </script>
