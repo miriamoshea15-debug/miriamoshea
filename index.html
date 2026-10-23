@@ -331,7 +331,10 @@
                     
                     <div class="lg:col-span-4 flex justify-center">
                         <div class="relative w-56 h-56 sm:w-64 sm:h-64 rounded-xl overflow-hidden shadow-2xl border border-amethyst-400/20 group">
-                            <div class="absolute inset-0 bg-gradient-to-tr from-amethyst-950 via-amethyst-800 to-amethyst-600 flex items-center justify-center p-6 text-center">
+                            <!-- Frozen Artwork Image (Shown by default for Frozen) -->
+                            <img id="player-artwork" src="Frozen Artwork.png" alt="Frozen Artwork" class="absolute inset-0 w-full h-full object-cover">
+                            <!-- Default Disc/Gradient Art (Hidden for Frozen, shown for other tracks) -->
+                            <div id="player-default-art" class="absolute inset-0 bg-gradient-to-tr from-amethyst-950 via-amethyst-800 to-amethyst-600 flex items-center justify-center p-6 text-center hidden">
                                 <div class="space-y-2">
                                     <i class="fa-solid fa-compact-disc text-5xl text-amethyst-200/60 animate-spin-slow"></i>
                                     <p class="font-cinzel text-lg tracking-widest text-white mt-2" id="current-track-title">Frozen</p>
@@ -396,8 +399,7 @@
                      data-youtube="https://www.youtube.com/channel/UC5FfhzzmLoZlGPIIOvJNR9g"
                      data-soundcloud="https://soundcloud.com/miriamoshea/frozen-demo-with-maja-mp3/s-OAOxiMpQa3W?in=miriamoshea/sets/miriam-unmixed/s-ltVG3YfKQEo&si=b78f77826c87405a892e936b66f463cc&utm_source=clipboard&utm_medium=text&utm_campaign=social_sharing">
                     <div class="aspect-square rounded-lg bg-gradient-to-br from-amethyst-800 to-amethyst-950 flex flex-col items-center justify-center p-4 text-center relative group overflow-hidden border border-amethyst-700/30">
-                        <i class="fa-solid fa-snowflake text-3xl text-amethyst-400/50 mb-2 group-hover:scale-110 transition-transform"></i>
-                        <span class="font-cinzel text-sm text-amethyst-200 uppercase tracking-widest">Single</span>
+                        <img src="Frozen Artwork.png" alt="Frozen Artwork" class="absolute inset-0 w-full h-full object-cover">
                     </div>
                     <div>
                         <h5 class="font-cinzel text-base text-white tracking-wide">Frozen</h5>
@@ -755,6 +757,17 @@
                 document.getElementById('current-track-title').textContent = title;
                 document.getElementById('current-track-subtitle').textContent = subtitle;
                 document.getElementById('player-track-artist').textContent = artist;
+
+                // Show Frozen Artwork only for Frozen, and default art for other tracks
+                const playerArtwork = document.getElementById('player-artwork');
+                const playerDefaultArt = document.getElementById('player-default-art');
+                if (title === 'Frozen') {
+                    playerArtwork.classList.remove('hidden');
+                    playerDefaultArt.classList.add('hidden');
+                } else {
+                    playerArtwork.classList.add('hidden');
+                    playerDefaultArt.classList.remove('hidden');
+                }
 
                 document.getElementById('player-spotify').href = spotifyUrl;
                 document.getElementById('player-apple').href = appleUrl;
