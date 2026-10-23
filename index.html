@@ -53,6 +53,13 @@
             background-color: #120d16;
             color: #d9d0e2;
             overflow-x: hidden;
+            width: 100%;
+            max-width: 100vw;
+            box-sizing: border-box;
+        }
+
+        *, *:before, *:after {
+            box-sizing: inherit;
         }
 
         .bg-wrapper {
@@ -197,20 +204,20 @@
             <div id="mobile-menu" class="hidden md:hidden glass-panel border-t border-amethyst-800/40 px-6 py-6 space-y-4">
                 <a href="#music" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Music</a>
                 <a href="#about" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">About</a>
-                <a href="#tour" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Tour</a>
+                <a href="#tour" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Music</a>
                 <a href="#contact" class="block text-sm tracking-widest uppercase text-amethyst-200 hover:text-white">Contact</a>
             </div>
         </header>
 
         <!-- HERO SECTION -->
         <section class="relative min-h-[calc(100vh-5rem)] flex flex-col items-center justify-center text-center px-4 sm:px-6 py-16">
-            <div class="max-w-5xl mx-auto space-y-4">
+            <div class="max-w-5xl mx-auto space-y-4 w-full overflow-hidden">
                 <div class="w-full max-w-3xl mx-auto px-2 flex justify-center items-center">
-                    <img src="MIRIAM'SLOGO_FINAL_edited-1.png" alt="Miriam O'Shea Logo" class="w-full max-w-2xl h-auto max-h-64 drop-shadow-[0_8px_32px_rgba(0,0,0,0.85)] filter">
+                    <img src="MIRIAM'SLOGO_FINAL_edited-1.png" alt="Miriam O'Shea Logo" class="w-full max-w-2xl h-auto max-h-64 drop-shadow-[0_8px_32px_rgba(0,0,0,0.85)] filter object-contain">
                 </div>
 
                 <!-- Hero Social & Streaming Links -->
-                <div class="flex items-center justify-center space-x-4 text-amethyst-300 pt-0 pb-1">
+                <div class="flex flex-wrap items-center justify-center gap-3 text-amethyst-300 pt-0 pb-1 max-w-full">
                     <a href="https://open.spotify.com/artist/0DY866dyn6XxODAyZ9X3V0" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-emerald-500/20 hover:border-emerald-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="Spotify">
                         <i class="fa-brands fa-spotify text-xl group-hover:scale-110 transition-transform"></i>
                     </a>
@@ -315,7 +322,7 @@
                             </div>
 
                             <!-- Social / Streaming Links in Player Box -->
-                            <div class="flex items-center space-x-3 text-amethyst-300">
+                            <div class="flex flex-wrap items-center gap-2 text-amethyst-300">
                                 <a id="player-spotify" href="https://open.spotify.com/artist/0DY866dyn6XxODAyZ9X3V0" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-emerald-500/20 hover:border-emerald-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 shadow-md" title="Spotify"><i class="fa-brands fa-spotify text-base"></i></a>
                                 <a id="player-apple" href="https://music.apple.com/ie/artist/miriam-oshea/1106293465" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-rose-400/20 hover:border-rose-300 hover:text-rose-300 flex items-center justify-center transition-all duration-300 shadow-md" title="Apple Music"><i class="fa-brands fa-apple text-base"></i></a>
                                 <a id="player-youtube" href="https://www.youtube.com/channel/UC5FfhzzmLoZlGPIIOvJNR9g" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-red-500/20 hover:border-red-400 hover:text-red-400 flex items-center justify-center transition-all duration-300 shadow-md" title="YouTube Music"><i class="fa-brands fa-youtube text-base"></i></a>
@@ -545,7 +552,7 @@
 
         <!-- FOOTER -->
         <footer class="mt-auto py-10 border-t border-amethyst-800/30 text-center text-xs text-amethyst-400 space-y-4">
-            <div class="flex items-center justify-center space-x-4 text-amethyst-300">
+            <div class="flex flex-wrap items-center justify-center gap-3 text-amethyst-300 max-w-full px-4">
                 <a href="https://open.spotify.com/artist/0DY866dyn6XxODAyZ9X3V0" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-emerald-500/20 hover:border-emerald-400 hover:text-emerald-400 flex items-center justify-center transition-all duration-300 shadow-md" aria-label="Spotify">
                     <i class="fa-brands fa-spotify text-base"></i>
                 </a>
@@ -564,9 +571,9 @@
                 <a href="https://www.tiktok.com/@miriamosheaofficial" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-cyan-400/20 hover:border-cyan-300 hover:text-cyan-300 flex items-center justify-center transition-all duration-300 shadow-md" aria-label="TikTok">
                     <i class="fa-brands fa-tiktok text-sm"></i>
                 </a>
-                <a href="https://www.facebook.com/miriamoshea" target="_blank" rel="noopener noreferrer" class="w-11 h-11 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-blue-400/20 hover:border-blue-300 hover:text-blue-300 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="Facebook">
-                        <i class="fa-brands fa-facebook text-lg group-hover:scale-110 transition-transform"></i>
-                    </a>
+                <a href="https://www.facebook.com/miriamoshea" target="_blank" rel="noopener noreferrer" class="w-9 h-9 rounded-full border border-amethyst-400/30 bg-amethyst-950/40 hover:bg-blue-400/20 hover:border-blue-300 hover:text-blue-300 flex items-center justify-center transition-all duration-300 group shadow-md" aria-label="Facebook">
+                    <i class="fa-brands fa-facebook text-base group-hover:scale-110 transition-transform"></i>
+                </a>
             </div>
             <p>&copy; 2026 Miriam O'Shea. All Rights Reserved.</p>
             <p class="font-cormorant italic text-amethyst-500 text-sm">miriamoshea.com</p>
@@ -751,7 +758,7 @@
       window.LOCALE = 'en';
       window.EMAIL_INVALID_MESSAGE = window.SMS_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
       window.REQUIRED_ERROR_MESSAGE = "This field cannot be left blank.";
-      window.GENERIC_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
+      window.GEN_INVALID_MESSAGE = "The information provided is invalid. Please review the field format and try again.";
       window.INVALID_NUMBER = "The information provided is invalid. Please review the field format and try again.";
       window.INVALID_DATE = "Please enter a valid date";
       window.REQUIRED_MULTISELECT_MESSAGE = 'Please select at least 1 option';
